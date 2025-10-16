@@ -51,3 +51,7 @@ jobs:
         
       # Catatan: --token menggunakan Secret yang kita buat di langkah 1B
       
+      # **TAMBAHAN KRITIS:** Variabel Lingkungan Midtrans
+      # Nilai ini diambil dari Secret yang sudah Anda simpan di Firebase CLI
+          MIDTRANS_SECRET_KEY: "YOUR_MIDTRANS_SERVER_KEY" # GANTI dengan Server Key Anda!
+          NODE_ENV: "production" # Atur ke "production" jika Anda sudah Live.
