@@ -5,51 +5,43 @@ name: Deploy Firebase Cloud Functions
 on:
   push:
     branches:
-      - main  # Ganti dengan nama branch utama Anda (misalnya: master)
+      - main  
     paths:
       - 'functions/**' # Hanya deploy jika ada perubahan di folder 'functions'
 
-# Pekerjaan (Jobs) yang akan dilakukan
 jobs:
   deploy:
     name: Deploy Functions
-    runs-on: ubuntu-latest # Menggunakan mesin virtual Linux
+    runs-on: ubuntu-latest
 
     steps:
       # 1. Checkout kode dari repo
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js (Pastikan versi Node.js yang sama dengan di package.json)
+      # 2. Setup Node.js 18
       - name: Setup Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # 3. Instal Firebase CLI
+      # 3. Instal Firebase CLI (Secara Global)
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      # 4. Instal Dependensi Cloud Functions
+      # 4. Instal Dependensi Cloud Functions (Dijalankan di dalam folder 'functions')
       - name: Install Function Dependencies
         run: npm install
-        working-directory: functions
+        working-directory: functions # <-- Ini memastikan npm install berjalan di folder yang benar
 
-
-      # 5. Build (Jika menggunakan TypeScript)
-      # Jika Anda menggunakan TypeScript, tambahkan langkah ini:
-      # - name: Build TypeScript
-      #   run: npm run build
-      #   working-directory: functions
-
-      # 6. Deploy ke Firebase (Bagian Krusial)
+      # 5. Deploy ke Firebase (Dari Root, tapi menargetkan folder 'functions')
       - name: Deploy Functions
+        # Firebase CLI otomatis mencari firebase.json atau folder 'functions' 
+        # di root, jadi kita bisa deploy dari root repositori.
         run: firebase deploy --only functions --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}"
         env:
-          # Variabel lingkungan untuk Project ID
+          # Pastikan Project ID dan Secret Key disuntikkan
           FIREBASE_PROJECT: androlin-4028a
-          
-          # **TAMBAHAN KRITIS:** Menyuntikkan Kunci Rahasia ke process.env
-          # Nilai ini diambil dari Secret yang sudah Anda simpan di GitHub Settings
           MIDTRANS_SECRET_KEY: ${{ secrets.MIDTRANS_SECRET_KEY }} 
-          NODE_ENV: "development" # Atur mode lingkungan
+          NODE_ENV: "development" # Menggunakan development untuk Sandbox
+          
