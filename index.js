@@ -11,7 +11,7 @@ const db = admin.firestore();
 // Ambil Kunci Rahasia dan Environment (Sandbox/Production) dari Environment Variables
 // PENTING: Kunci ini harus di-set menggunakan perintah firebase functions:config:set
 const MIDTRANS_SECRET_KEY = process.env.MIDTRANS_SECRET_KEY; 
-const isProduction = functions.config().midtrans.is_production === 'true'; 
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Inisialisasi Midtrans Snap API (untuk membuat token)
 const snap = new midtransClient.Snap({
