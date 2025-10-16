@@ -46,12 +46,10 @@ jobs:
       - name: Deploy Functions
         run: firebase deploy --only functions --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}"
         env:
-          # Pastikan Anda menggunakan Project ID Firebase Anda
+          # Variabel lingkungan untuk Project ID
           FIREBASE_PROJECT: androlin-4028a
-        
-      # Catatan: --token menggunakan Secret yang kita buat di langkah 1B
-      
-      # **TAMBAHAN KRITIS:** Variabel Lingkungan Midtrans
-      # Nilai ini diambil dari Secret yang sudah Anda simpan di Firebase CLI
-          MIDTRANS_SECRET_KEY: "YOUR_MIDTRANS_SERVER_KEY" # GANTI dengan Server Key Anda!
-          NODE_ENV: "production" # Atur ke "production" jika Anda sudah Live.
+          
+          # **TAMBAHAN KRITIS:** Menyuntikkan Kunci Rahasia ke process.env
+          # Nilai ini diambil dari Secret yang sudah Anda simpan di GitHub Settings
+          MIDTRANS_SECRET_KEY: ${{ secrets.MIDTRANS_SECRET_KEY }} 
+          NODE_ENV: "production" # Atur mode lingkungan
