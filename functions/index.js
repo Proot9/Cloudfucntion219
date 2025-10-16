@@ -1,3 +1,4 @@
+// function 
 // Import Firebase Admin SDK (untuk interaksi database dan inisialisasi)
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
