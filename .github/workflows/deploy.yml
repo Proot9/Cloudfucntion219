@@ -1,0 +1,53 @@
+# Nama Alur Kerja (Workflow)
+name: Deploy Firebase Cloud Functions
+
+# Trigger: Kapan alur kerja ini berjalan
+on:
+  push:
+    branches:
+      - main  # Ganti dengan nama branch utama Anda (misalnya: master)
+    paths:
+      - 'functions/**' # Hanya deploy jika ada perubahan di folder 'functions'
+
+# Pekerjaan (Jobs) yang akan dilakukan
+jobs:
+  deploy:
+    name: Deploy Functions
+    runs-on: ubuntu-latest # Menggunakan mesin virtual Linux
+
+    steps:
+      # 1. Checkout kode dari repo
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js (Pastikan versi Node.js yang sama dengan di package.json)
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 3. Instal Firebase CLI
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      # 4. Instal Dependensi Cloud Functions
+      - name: Install Function Dependencies
+        run: |
+          cd functions
+          npm install
+
+      # 5. Build (Jika menggunakan TypeScript)
+      # Jika Anda menggunakan TypeScript, tambahkan langkah ini:
+      # - name: Build TypeScript
+      #   run: npm run build
+      #   working-directory: functions
+
+      # 6. Deploy ke Firebase (Bagian Krusial)
+      - name: Deploy Functions
+        run: firebase deploy --only functions --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}"
+        env:
+          # Pastikan Anda menggunakan Project ID Firebase Anda
+          FIREBASE_PROJECT: androlin-4028a
+        
+      # Catatan: --token menggunakan Secret yang kita buat di langkah 1B
+      
