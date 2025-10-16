@@ -37,12 +37,12 @@ jobs:
 
       # 5. Deploy ke Firebase (Dari Root, tapi menargetkan folder 'functions')
       - name: Deploy Functions
-        # Firebase CLI otomatis mencari firebase.json atau folder 'functions' 
-        # di root, jadi kita bisa deploy dari root repositori.
-        run: firebase deploy --only functions --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}"
+        run: firebase deploy --only functions --token "${{ secrets.FIREBASE_DEPLOY_TOKEN }}" --project ${{ env.FIREBASE_PROJECT }}
         env:
-          # Pastikan Project ID dan Secret Key disuntikkan
-          FIREBASE_PROJECT: androlin-4028a
-          MIDTRANS_SECRET_KEY: "${{ secrets.MIDTRANS_SECRET_KEY }}"
-          NODE_ENV: "development" # Menggunakan development untuk Sandbox
+          # Variabel lingkungan untuk Project ID (disimpan juga sebagai env var)
+          FIREBASE_PROJECT: androlin-4028a # <-- PASTIKAN INI ADALAH PROJECT ID ANDA
+          
+          # Variabel rahasia untuk Cloud Functions
+          MIDTRANS_SECRET_KEY: ${{ secrets.MIDTRANS_SECRET_KEY }} 
+          NODE_ENV: "development"
           
