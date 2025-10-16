@@ -32,9 +32,9 @@ jobs:
 
       # 4. Instal Dependensi Cloud Functions
       - name: Install Function Dependencies
-        run: |
-          cd functions
-          npm install
+        run: npm install
+        working-directory: functions
+
 
       # 5. Build (Jika menggunakan TypeScript)
       # Jika Anda menggunakan TypeScript, tambahkan langkah ini:
@@ -52,4 +52,4 @@ jobs:
           # **TAMBAHAN KRITIS:** Menyuntikkan Kunci Rahasia ke process.env
           # Nilai ini diambil dari Secret yang sudah Anda simpan di GitHub Settings
           MIDTRANS_SECRET_KEY: ${{ secrets.MIDTRANS_SECRET_KEY }} 
-          NODE_ENV: "production" # Atur mode lingkungan
+          NODE_ENV: "development" # Atur mode lingkungan
